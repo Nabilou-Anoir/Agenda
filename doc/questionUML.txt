@@ -7,31 +7,30 @@ Diagramme 1 (figure 2)
 
 Avantages :
 
-Le diagramme est simple, il suit une forte dépendance entre Event, Répétition, et Termination.
-Les relations entre les classes sont définies.
+Le diagramme suit une forte dépendance entre Event, Répétition, et Termination.
+Les relations entre les classes sont clairement définies.
 Le diagramme favorise la séparation des préoccupations :
-Event gère les informations générales de l'événement.
-Repetition gère la logique de répétition.
+la classe Event controle les informations générales de l'événement.
+La classe Repetition gère la logique de répétition.
 Termination s'occupe des détails sur la fin des répétitions.
 
 Inconvénients :
 
-La gestion des événements récurrents nécessite une combinaison de plusieurs classes (Event avec une référence à Repetition, elle-même liée à Termination), ce qui peut compliquer les implémentations et les tests.
+La gestion des événements récurrents nécessite une combinaison de plusieurs classes (Event avec une référence à Repetition, elle-même liée à Termination), ce qui peut compliquer l'implémentation
 Si un événement récurrent n’a pas de Termination, sa gestion pourrait devenir plus complexes.
 
 Diagramme 2 ( fait par ingénieur)
 
 Avantages :
 
-La classe Event est étendue en deux sous-classes : RepetitiveEvent et FixedTerminationEvent. Cela permet une gestion plus claire.
-La séparation en classes dérivées rend le code plus lisible et chaque type d’événement est géré individuellement.
-Le diagramme favorise une extensibilité naturelle :
-Ajouter un nouveau type d’événement (exemple : MonthlyEvent) devient plus simple.
+La classe Event est répartie en deux sous-classes : RepetitiveEvent et FixedTerminationEvent. 
+La séparation des classe rend le code plus compréhensible et chaque type d’événement est géré individuellement.
+Le diagramme favorise une extensibilité plus simple :
+Ajouter un nouveau type d’événement devient plus simple.
 
 Inconvénients :
 
-Une complexité plus importante pour les développeurs : il est nécessaire de connaître quelle classe spécifique utiliser pour chaque type d'événement.
-Si les besoins changent (par exemple, gestion dynamique des exceptions ou une nouvelle logique de répétition), cela nécessitera potentiellement de modifier plusieurs classes.
+plus difficile a coder  : il est nécessaire de connaître quelle classe spécifique utiliser pour chaque type d'événement.
 
 
 
