@@ -2,30 +2,38 @@ package agenda;
 
 import java.time.*;
 import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
+import java.util.Set;
 
+/**
+ * Represents a single event in the agenda.
+ */
 public class Event {
 
     /**
-     * The myTitle of this event
+     * The title of this event
      */
     private String myTitle;
-    
+
     /**
      * The starting time of the event
      */
     private LocalDateTime myStart;
 
     /**
-     * The durarion of the event 
+     * The duration of the event
      */
     private Duration myDuration;
 
+    private ChronoUnit repetitionFrequency = null;
+    private Termination termination = null;
+    private Set<LocalDate> exceptions = new HashSet<>();
 
     /**
      * Constructs an event
      *
-     * @param title the title of this event
-     * @param start the start time of this event
+     * @param title    the title of this event
+     * @param start    the start time of this event
      * @param duration the duration of this event
      */
     public Event(String title, LocalDateTime start, Duration duration) {
@@ -35,33 +43,29 @@ public class Event {
     }
 
     public void setRepetition(ChronoUnit frequency) {
-        // TODO : implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+        this.repetitionFrequency = frequency;
     }
 
     public void addException(LocalDate date) {
-        // TODO : implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+        exceptions.add(date);
     }
 
     public void setTermination(LocalDate terminationInclusive) {
-        // TODO : implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+        this.termination = new Termination(myStart.toLocalDate(), repetitionFrequency, terminationInclusive);
     }
 
     public void setTermination(long numberOfOccurrences) {
-        // TODO : implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+        this.termination = new Termination(myStart.toLocalDate(), repetitionFrequency, numberOfOccurrences);
     }
 
     public int getNumberOfOccurrences() {
-        // TODO : implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+        if (termination == null) throw new UnsupportedOperationException("No termination set");
+        return termination.getNumberOfOccurrences();
     }
 
     public LocalDate getTerminationDate() {
-        // TODO : implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+        if (termination == null) throw new UnsupportedOperationException("No termination set");
+        return termination.getTerminationDate();
     }
 
     /**
@@ -70,11 +74,31 @@ public class Event {
      * @param aDay the day to test
      * @return true if the event occurs on that day, false otherwise
      */
+
     public boolean isInDay(LocalDate aDay) {
-        // TODO : implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+        if (repetitionFrequency == null) {
+            LocalDate startDate = myStart.toLocalDate();
+            LocalDate endDate = myStart.plus(myDuration).toLocalDate();
+            return (!aDay.isBefore(startDate)) && (!aDay.isAfter(endDate));
+        } else {
+            LocalDate current = myStart.toLocalDate();
+            while (!current.isAfter(aDay)) {
+                if (exceptions.contains(current)) {
+                    current = current.plus(1, repetitionFrequency);
+                    continue;
+                }
+                if (current.equals(aDay)) return true;
+                if (termination != null) {
+                    if (current.isEqual(termination.getTerminationDate()))
+                        return true;
+                    if (termination.isAfter(current)) break;
+                }
+                current = current.plus(1, repetitionFrequency);
+            }
+            return false;
+        }
     }
-   
+
     /**
      * @return the myTitle
      */
@@ -88,7 +112,6 @@ public class Event {
     public LocalDateTime getStart() {
         return myStart;
     }
-
 
     /**
      * @return the myDuration

@@ -1,16 +1,11 @@
 package agenda;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Repetition {
-    public ChronoUnit getFrequency() {
-        return myFrequency;
-    }
-
     /**
      * Stores the frequency of this repetition, one of :
      * <UL>
@@ -21,26 +16,60 @@ public class Repetition {
      */
     private final ChronoUnit myFrequency;
 
+    /**
+     * List of exceptions for this repetition.
+     */
+    private final List<LocalDate> exceptions = new ArrayList<>();
+
+    /**
+     * Termination conditions for this repetition
+     */
+    private Termination termination = null;
+
+    /**
+     * Constructor to define the frequency of repetition
+     * @param myFrequency the frequency of repetition
+     */
     public Repetition(ChronoUnit myFrequency) {
         this.myFrequency = myFrequency;
     }
 
     /**
-     * Les exceptions à la répétition
-     * @param date un date à laquelle l'événement ne doit pas se répéter
+     * @return the frequency of repetition
      */
-    public void addException(LocalDate date) {
-        // TODO : implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+    public ChronoUnit getFrequency() {
+        return myFrequency;
     }
 
     /**
-     * La terminaison d'une répétition (optionnelle)
-     * @param termination la terminaison de la répétition
+     * Adds an exception to the repetition
+     * @param date a date where the event should not repeat
+     */
+    public void addException(LocalDate date) {
+        exceptions.add(date);
+    }
+
+    /**
+     * Sets the termination of this repetition
+     * @param termination the termination of the repetition
      */
     public void setTermination(Termination termination) {
-        // TODO : implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+        this.termination = termination;
+    }
 
+    /**
+     * Checks if a given date is an exception
+     * @param date the date to check
+     * @return true if the date is an exception, false otherwise
+     */
+    public boolean isException(LocalDate date) {
+        return exceptions.contains(date);
+    }
+
+    /**
+     * @return the termination of this repetition
+     */
+    public Termination getTermination() {
+        return termination;
     }
 }

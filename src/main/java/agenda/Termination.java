@@ -2,20 +2,28 @@ package agenda;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.Temporal;
 
 public class Termination {
 
-    public LocalDate terminationDateInclusive() {
-        // TODO : implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
-    }
+    /**
+     * The start date of the event
+     */
+    private final LocalDate start;
 
-    public long numberOfOccurrences() {
-        // TODO : implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
-    }
+    /**
+     * The frequency of the event's repetition
+     */
+    private final ChronoUnit frequency;
 
+    /**
+     * The termination date (inclusive) for this repetition
+     */
+    private final LocalDate terminationInclusive;
+
+    /**
+     * The number of occurrences for this repetition
+     */
+    private final int numberOfOccurrences;
 
     /**
      * Constructs a fixed termination event ending at a given date
@@ -30,8 +38,10 @@ public class Termination {
      * @see ChronoUnit#between(Temporal, Temporal)
      */
     public Termination(LocalDate start, ChronoUnit frequency, LocalDate terminationInclusive) {
-        // TODO : implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+        this.start = start;
+        this.frequency = frequency;
+        this.terminationInclusive = terminationInclusive;
+        this.numberOfOccurrences = (int) frequency.between(start, terminationInclusive) + 1;
     }
 
     /**
@@ -46,8 +56,35 @@ public class Termination {
      * @param numberOfOccurrences the number of occurrences of this repetitive event
      */
     public Termination(LocalDate start, ChronoUnit frequency, long numberOfOccurrences) {
-        // TODO : implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+        this.start = start;
+        this.frequency = frequency;
+        this.numberOfOccurrences = (int) numberOfOccurrences;
+        this.terminationInclusive = start.plus(numberOfOccurrences - 1, frequency);
+    }
+
+    /**
+     * Returns the termination date (inclusive)
+     * @return the termination date
+     */
+    public LocalDate getTerminationDate() {
+        return terminationInclusive;
+    }
+
+    /**
+     * Returns the number of occurrences of the event
+     * @return the number of occurrences
+     */
+    public int getNumberOfOccurrences() {
+        return numberOfOccurrences;
+    }
+
+    /**
+     * Checks if a given date is after the termination date
+     * @param date the date to check
+     * @return true if the date is after the termination date
+     */
+    public boolean isAfter(LocalDate date) {
+        return date.isAfter(terminationInclusive);
     }
 
 }
