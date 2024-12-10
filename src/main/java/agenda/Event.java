@@ -76,29 +76,37 @@ public class Event {
      */
 
     public boolean isInDay(LocalDate aDay) {
+        // Cas sans répétition
         if (repetitionFrequency == null) {
             LocalDate startDate = myStart.toLocalDate();
             LocalDate endDate = myStart.plus(myDuration).toLocalDate();
-            return (!aDay.isBefore(startDate)) && (!aDay.isAfter(endDate));
-        } else {
-            LocalDate current = myStart.toLocalDate();
-            while (!current.isAfter(aDay)) {
-                if (exceptions.contains(current)) {
-                    current = current.plus(1, repetitionFrequency);
-                    continue;
-                }
-                if (current.equals(aDay)) return true;
-                if (termination != null) {
-                    if (current.isEqual(termination.getTerminationDate()))
-                        return true;
-                    if (termination.isAfter(current)) break;
-                }
-                current = current.plus(1, repetitionFrequency);
-            }
-            return false;
+            return !aDay.isBefore(startDate) && !aDay.isAfter(endDate);
         }
-    }
+        LocalDate currentDate = myStart.toLocalDate();
 
+        while (!currentDate.isAfter(aDay)) {
+            // Vérifie si la date courante est une exception
+            if (exceptions.contains(currentDate)) {
+                currentDate = currentDate.plus(1, repetitionFrequency);
+                continue;
+            }
+
+            if (currentDate.equals(aDay)) {
+                return true;
+            }
+            if (termination != null) {
+                if (termination.getTerminationDate().isEqual(currentDate)) {
+                    return true;
+                }
+                if (termination.getTerminationDate().isBefore(currentDate)) {
+                    break;
+                }
+            }
+            currentDate = currentDate.plus(1, repetitionFrequency);
+        }
+
+        return false;
+    }
     /**
      * @return the myTitle
      */

@@ -25,7 +25,7 @@ public class Agenda {
      * @param day the day toi test
      * @return a list of events that occur on that day
      */
-    public List<Event> eventsInDay(LocalDate day) {
+    public ArrayList<Event> eventsInDay(LocalDate day) {
         ArrayList<Event> Events = new ArrayList<Event>();
         for (Event e : events) {
             if (e.isInDay(day)) {

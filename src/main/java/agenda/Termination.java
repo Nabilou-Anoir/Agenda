@@ -58,8 +58,9 @@ public class Termination {
     public Termination(LocalDate start, ChronoUnit frequency, long numberOfOccurrences) {
         this.start = start;
         this.frequency = frequency;
-        this.numberOfOccurrences = (int) numberOfOccurrences;
         this.terminationInclusive = start.plus(numberOfOccurrences - 1, frequency);
+        this.numberOfOccurrences = (int) numberOfOccurrences;
+
     }
 
     /**
